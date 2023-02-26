@@ -1,2 +1,7 @@
 let char = new Sorcerer('LsNN.');
-console.log(char)
+let monster = new LittleMonster();
+
+let stage = new Stage(char, monster, document.querySelector('#char'), document.querySelector('#monster'));
+
+stage.start()
+
