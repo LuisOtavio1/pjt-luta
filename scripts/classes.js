@@ -59,11 +59,12 @@ class BigMonster extends Character {
 }
 
 class Stage {
-    constructor(hero, monster, heroEl, monsterEl){
+    constructor(hero, monster, heroEl, monsterEl, logObject){
         this.hero = hero;
         this.monster = monster;
         this.heroEl = heroEl;
         this.monsterEl = monsterEl;
+        this.log = logObject;
     }
 
     start() {
@@ -86,7 +87,12 @@ class Stage {
     }
     doAttack(attacking, attacked) {
         if(attacking.life <= 0 || attacked.life <= 0) {
-            console.log('Está atacando mesmo com o inimigo morto')
+            if(attacking.life <= 0) {
+                this.log.addMessage('Morto não ataca')
+            }
+            if (attacking.life > 0) {
+                this.log.addMessage(`${attacking.name} Está atacando mesmo com o inimigo morto`)
+            }
             return;
         }
         
@@ -98,7 +104,7 @@ class Stage {
 
         if(newAttack > newDefense){
             attacked.life -= newAttack;
-            console.log(`${attacking.name} Causou ${newAttack.toFixed(2)} de dano em ${attacked.name}`)
+            this.log.addMessage(`${attacking.name} Causou ${newAttack.toFixed(2)} de dano em ${attacked.name}`)
         } else {
             console.log(`${attacking.name} Errou o ataque, ${attacked.name} conseguiu se esquivar`)
         }
@@ -109,3 +115,23 @@ class Stage {
     }
 }
 
+class Log {
+    list = [];
+
+    constructor(listEl) {
+        this.listEl = listEl;
+    }
+
+    addMessage(msg) {
+        this.list.push(msg)
+        this.render();
+    }
+
+    render() {
+        this.listEl.innerHTML = "";
+
+        for(let i in this.list) {
+            this.listEl.innerHTML += `<li>${this.list[i]}</li>`;
+        }
+    }
+}
